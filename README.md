@@ -14,10 +14,10 @@ This repository contains Python scripts designed to automate tasks related to ma
 ## Scripts Overview
 Here’s a list of all the scripts in this repository along with their descriptions:
 
-1. **monday_batch_userType.py**: Automates the batch processing of user types in Monday.com, such as assigning or modifying user roles in bulk.
-2. **monday_export_users.py**: Exports a list of users from Monday.com, including their details for reporting and administrative purposes.
-3. **monday_scim_export_teams.py**: Exports team data using SCIM integration, allowing for team management and updates.
-4. **monday_team_membership.py**: Manages team memberships in Monday.com, including adding or removing users from teams.
+1. **[monday_batch_userType.py](monday_batch_userType.py)**: Automates the batch processing of user types in Monday.com, such as assigning or modifying user roles in bulk.
+2. **[monday_export_users.py](monday_export_users.py)**: Exports a list of users from Monday.com, including their details for reporting and administrative purposes.
+3. **[monday_scim_export_teams.py](monday_scim_export_teams.py)**: Exports team data using SCIM integration, allowing for team management and updates.
+4. **[monday_team_membership.py](monday_team_membership.py)**: Manages team memberships in Monday.com, including adding or removing users from teams.
 
 ## Requirements
 - **Python 3.x**: Ensure that Python 3 is installed on your system.
