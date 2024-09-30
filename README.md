@@ -3,7 +3,6 @@
 This repository contains Python scripts designed to automate tasks related to managing Monday.com users, teams, and SCIM exports.
 
 ## Table of Contents
-- [Monday.com Lab](#mondaycom-lab)
   - [Table of Contents](#table-of-contents)
   - [Scripts Overview](#scripts-overview)
   - [Requirements](#requirements)
