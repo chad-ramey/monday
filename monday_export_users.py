@@ -1,9 +1,9 @@
 """
-Script: Monday Export Users with Proper User ID
+Script: Monday Export Users with Last Activity
 
 Description:
-This script fetches user information from Monday.com using the SCIM API and exports the data to a CSV file. 
-The CSV file will contain details such as User ID and other relevant fields fetched from the API.
+This script fetches user information from Monday.com using the GraphQL API and exports the data to a CSV file.
+The CSV file will contain details such as User ID, Name, Email, Created At, and Last Activity.
 
 Functions:
 - get_monday_token: Reads the Monday.com authentication token from a specified file.
@@ -17,14 +17,12 @@ Usage:
 Notes:
 - Ensure that the API token has the necessary permissions to access user details.
 - Handle the API token securely and do not expose it in the code.
-- Customize the input prompts and error handling as needed for your organization.
 
 Author: Chad Ramey
-Date: August 2, 2024
+Date: December 3, 2024
 """
 
 import requests
-import json
 import csv
 
 def get_monday_token(token_path):
@@ -46,56 +44,50 @@ def main():
     access_token = get_monday_token(token_path)
 
     # Define your API endpoint and headers
-    url = "https://onepeloton.monday.com/scim/v2/Users"
+    url = "https://onepeloton.monday.com/v2"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {access_token}',
     }
 
-    # Initialize an empty list to store all the data
-    all_users = []
-
-    # Loop through the paginated results
-    start_index = 1
-    items_per_page = 50
-
-    while True:
-        params = {
-            'itemsPerPage': items_per_page,
-            'startIndex': start_index
+    # GraphQL query to fetch user details, including last activity
+    query = """
+    {
+        users {
+            id
+            name
+            email
+            created_at
+            last_activity
         }
+    }
+    """
 
-        response = requests.get(url, headers=headers, params=params)
+    # Make the API request
+    response = requests.post(url, headers=headers, json={'query': query})
 
-        if response.status_code == 200:
-            data = response.json()
-            resources = data.get('Resources', [])
+    if response.status_code == 200:
+        data = response.json()
 
-            # Add the fetched users to the list
-            all_users.extend(resources)
+        # Check for errors in the response
+        if 'errors' in data:
+            print(f"Error in response: {data['errors']}")
+            return
 
-            # Check for pagination
-            total_results = data.get('totalResults', 0)
-            start_index += items_per_page
+        # Extract user data
+        users = data['data']['users']
 
-            if start_index > total_results:
-                break
-        else:
-            print(f"Failed to retrieve data. Status code: {response.status_code}")
-            break
+        # Save the data to a CSV file
+        csv_file = 'users.csv'
+        with open(csv_file, 'w', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=['id', 'name', 'email', 'created_at', 'last_activity'])
+            writer.writeheader()
+            writer.writerows(users)
 
-    # Save the data to a CSV file
-    csv_file = 'users.csv'
-    with open(csv_file, 'w', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=all_users[0].keys())
-
-        # Write header
-        writer.writeheader()
-
-        # Write data
-        writer.writerows(all_users)
-
-    print(f"Data exported to {csv_file}")
+        print(f"Data exported to {csv_file}")
+    else:
+        print(f"Failed to retrieve data. Status code: {response.status_code}")
+        print(f"Response content: {response.text}")
 
 if __name__ == "__main__":
     main()
