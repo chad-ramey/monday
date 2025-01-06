@@ -30,14 +30,7 @@ import json
 import csv
 
 def get_monday_token(token_path):
-    """Reads the Monday.com SCIM authentication token from a specified file.
-
-    Args:
-        token_path: The path to the file containing the Monday.com token.
-
-    Returns:
-        The Monday.com token as a string.
-    """
+    """Reads the Monday.com SCIM authentication token from a specified file."""
     with open(token_path, 'r') as token_file:
         return token_file.read().strip()
 
@@ -52,6 +45,15 @@ def main():
 
     # Prompt the user for the CSV file location
     csv_file_location = input("Enter the path to the CSV file (e.g., user_ids.csv): ")
+
+    # Prompt the user to choose the new user type (Viewer or Member)
+    user_type = input("Would you like to update users to 'Viewer' or 'Member'? ").strip().lower()
+
+    if user_type not in ['viewer', 'member']:
+        print("Invalid user type. Please enter either 'Viewer' or 'Member'.")
+        return
+
+    print(f"\nBatch updating users to '{user_type.capitalize()}'...\n")
 
     # Open the CSV file and read user IDs
     try:
@@ -69,7 +71,7 @@ def main():
                         {
                             "op": "replace",
                             "value": {
-                                "userType": "viewer"
+                                "userType": user_type
                             }
                         }
                     ]
@@ -84,7 +86,7 @@ def main():
                 response = requests.patch(url, headers=headers, json=payload)
 
                 if response.status_code == 200:
-                    print(f"User {user_id} updated successfully.")
+                    print(f"User {user_id} updated successfully to {user_type.capitalize()}.")
                 else:
                     print(f"Error updating user {user_id}: {response.status_code} - {response.text}")
     except FileNotFoundError:
