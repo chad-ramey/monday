@@ -50,6 +50,10 @@ def main():
             created_at
             last_activity
             enabled
+            is_guest
+            is_admin
+            is_view_only
+            join_date
         }
     }
     """
@@ -63,9 +67,12 @@ def main():
             return
 
         users = data['data']['users']
-        csv_file = 'monday_users.csv'
+        csv_file = 'users.csv'
         with open(csv_file, 'w', newline='') as file:
-            writer = csv.DictWriter(file, fieldnames=['id', 'name', 'email', 'created_at', 'last_activity', 'enabled'])
+            writer = csv.DictWriter(file, fieldnames=[
+                'id', 'name', 'email', 'created_at', 'last_activity', 
+                'enabled', 'is_guest', 'is_admin', 'is_view_only', 'join_date'
+            ])
             writer.writeheader()
             writer.writerows(users)
 
