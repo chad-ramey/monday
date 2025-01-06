@@ -19,9 +19,10 @@ Notes:
 - Ensure that the API token has the necessary permissions to update user details.
 - Handle the API token securely and do not expose it in the code.
 - Customize the input prompts and error handling as needed for your organization.
+- CSV header is user_ids followed by list of Monday account IDs 
 
 Author: Chad Ramey
-Date: August 2, 2024
+Date: January 6, 2025
 """
 
 import requests
