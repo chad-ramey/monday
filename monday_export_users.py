@@ -19,38 +19,28 @@ Notes:
 - Handle the API token securely and do not expose it in the code.
 
 Author: Chad Ramey
-Date: December 3, 2024
+Date: January 6, 2025
 """
 
 import requests
 import csv
 
 def get_monday_token(token_path):
-    """Reads the Monday.com authentication token from a specified file.
-
-    Args:
-        token_path: The path to the file containing the Monday.com token.
-
-    Returns:
-        The Monday.com token as a string.
-    """
+    """Reads the Monday.com authentication token from a specified file."""
     with open(token_path, 'r') as token_file:
         return token_file.read().strip()
 
 def main():
     """Main function to fetch and export user data based on user input."""
-    # Prompt the user for the path to their API token file
     token_path = input("Please enter the path to your API token file: ")
     access_token = get_monday_token(token_path)
 
-    # Define your API endpoint and headers
     url = "https://onepeloton.monday.com/v2"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {access_token}',
     }
 
-    # GraphQL query to fetch user details, including last activity
     query = """
     {
         users {
@@ -59,28 +49,23 @@ def main():
             email
             created_at
             last_activity
+            enabled
         }
     }
     """
 
-    # Make the API request
     response = requests.post(url, headers=headers, json={'query': query})
 
     if response.status_code == 200:
         data = response.json()
-
-        # Check for errors in the response
         if 'errors' in data:
             print(f"Error in response: {data['errors']}")
             return
 
-        # Extract user data
         users = data['data']['users']
-
-        # Save the data to a CSV file
-        csv_file = 'users.csv'
+        csv_file = 'monday_users.csv'
         with open(csv_file, 'w', newline='') as file:
-            writer = csv.DictWriter(file, fieldnames=['id', 'name', 'email', 'created_at', 'last_activity'])
+            writer = csv.DictWriter(file, fieldnames=['id', 'name', 'email', 'created_at', 'last_activity', 'enabled'])
             writer.writeheader()
             writer.writerows(users)
 
