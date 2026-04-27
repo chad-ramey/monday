@@ -35,7 +35,7 @@ def main():
     token_path = input("Please enter the path to your API token file: ")
     access_token = get_monday_token(token_path)
 
-    url = "https://onepeloton.monday.com/v2"
+    url = "https://api.monday.com/v2"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {access_token}',

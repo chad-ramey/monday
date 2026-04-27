@@ -41,7 +41,7 @@ def main():
     api_key = get_monday_token(token_path)
 
     # Define the base URL
-    base_url = 'https://onepeloton.monday.com/scim/v2/Users/'
+    base_url = 'https://api.monday.com/scim/v2/Users/'
 
     # Prompt the user for the CSV file location
     csv_file_location = input("Enter the path to the CSV file (e.g., user_ids.csv): ")

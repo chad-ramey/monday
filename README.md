@@ -26,7 +26,7 @@ Here’s a list of all the scripts in this repository along with their descripti
 ## Installation
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-repo-name/monday-automation-scripts.git
+   git clone https://github.com/chad-ramey/monday-automation-scripts.git
    ```
 2. Install the required dependencies:
    ```bash
